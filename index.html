@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        {{store_name}}
+        {{! Add the label of the current navigation item on list pages }}
+        {{#list_page}}{{#navigation}}{{#is_current}}- {{label}}{{/is_current}}{{/navigation}}{{/list_page}}
+        {{! Add the product title on product pages }}
+        {{#product_page}}{{#product}}- {{title}}{{/product}}{{/product_page}}
+    </title>
+
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,400italic|PT+Sans+Narrow:700|PT+Serif:400,700|Abril+Fatface' rel='stylesheet' type='text/css'>
+    <link href="{{assets_url}}/shared/css/base.css" rel="stylesheet" type="text/css">
+    <style>
+    /* ******************************
+
+    GENERAL
+
+    ****************************** */
+
+    body, html {
+        height: 100%;
+    }
+    
+    body {
+        background-color: #ecf0f1;
+        color: #151515;
+        font-family: 'PT Serif', serif;
+        font-size: 13px;
+        line-height: 1.7em;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+        font-weight: 700;
+        color: #151515;
+        text-decoration: none;
+    }
+
+    a:hover {
+        opacity: 0.5;
+        /* IE 8 */
+        color: #808283\9;
+    }
+
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 13px;
+        line-height: 1.7em;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+    
+    li{
+        list-style-type: none;
+    }
+
+    /* ******************************
+
+    HEADER
+
+    ****************************** */
+
+    header {
+        padding: 200px 100px 200px 100px;
+    }
+
+    .logotype {
+        font-family: 'Abril Fatface', cursive;
+        font-weight: normal;
+        border: 0;
+        font-size: 52px;
+        line-height: 62px;
+        color: #151515;
+        text-decoration: none;
+        display: inline-block\9;
+    }
+    
+    .logotype:hover{
+        opacity: 0.5;
+        /* IE 8 */
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    }
+    
+    .logotype img,
+    #store_description{
+        max-width: 275px;
+    }
+
+    /* ******************************
+
+    PRODUCTS
+
+    ****************************** */
+    
+    .slide_content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+    }
+    
+    .slide_small{
+        background-color: #ecf0f1;
+        position: relative;
+    }
+    
+    .product_slide {
+        position: relative;
+    }
+
+    .product_list > li {
+        display: block;
+    }
+
+    .product_list .image_container,
+    #product .image_container{
+        position: relative;
+        overflow-y: hidden;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    .product_list .image_container img,
+    #product .image_container img{
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+    .product_list .details_container {
+        width: 275px;
+        padding: 50px 50px;
+        margin-left: 50px;
+        text-align: center;
+        word-wrap: break-word;
+        position: relative;
+        /* Firefox */
+        max-height: -moz-calc(100% - 200px);
+        /* WebKit */
+        max-height: -webkit-calc(100% - 200px);
+        /* Opera */
+        max-height: -o-calc(100% - 200px);
+        /* Standard */
+        max-height: calc(100% - 200px); 
+    }
+    
+    .details_large{
+        border-radius: 20px;
+        background: rgb(236, 240, 241);
+        background: rgba(236, 240, 241, .95);
+    }
+    
+    .product_list .text_content{
+        overflow: auto;
+        position: relative;
+    }
+    
+    .product_list .fixed_content{
+        margin-top: 15px;
+        position: relative;
+    }
+    
+    .product_list h2,
+    #product_info h1{
+        font-family: 'PT Sans Narrow', sans-serif;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .product_list .description {
+        line-height: 1.7em;
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .product_list .price,
+    .product_list .out_of_stock,
+    select{
+        font-family: 'PT Sans', sans-serif;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 17px;
+        word-wrap: break-word;
+    }
+
+    .product_list .price{
+        border-bottom: 2px solid #151515;
+    }
+    
+    .product_list .out_of_stock {
+        line-height: 3em;
+        min-width: 200px;
+        max-width: 275px;
+    }
+    
+
+    /* ******************************
+
+    VARIATIONS SELECT
+
+    ****************************** */
+    
+    select {
+        padding-right: 15px;
+        margin: 0;
+        color: #151515;
+        font-size: 15px;
+        background: transparent url('http://puu.sh/4PMPf.png') no-repeat right center;
+        background-image: none\9;
+        background-image: none\0;
+        border: none;
+        outline: none;
+        display: inline-block;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        text-indent: 0.01px;
+        text-overflow: "";
+        max-width: 275px;
+    }
+    
+    /* ******************************
+
+    "ADD TO CART" BUTTON
+
+    ****************************** */
+
+    .tictail_add_to_cart_button {
+        min-width: 200px;
+        max-width: 275px;
+        padding: 10px 15px;
+        margin: 15px 0 10px 0;
+        background-color: #151515;
+        border: 0;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        font-family: 'PT Sans Narrow', sans-serif;
+        font-size: 14px;
+        line-height: 1.7em;
+        font-weight: 700;
+        -webkit-font-smoothing: antialiased;
+        color: #ecf0f1;
+        cursor: pointer;
+        text-transform: uppercase;
+        word-wrap: break-word;
+    }
+
+    .tictail_add_to_cart_button:hover{
+        background: rgb(128, 130, 131);
+        background: rgba(21, 21, 21, .5);
+    }
+
+    /* ******************************
+
+    FOOTER AND MAIN NAVIGATION
+
+    ****************************** */
+    
+    #footer{
+        background-color: #151515;
+        text-align: right;
+        padding: 25px 100px 25px 100px;
+        position: relative;
+    }
+
+    #footer a{
+        color: #ecf0f1;
+        opacity: 0.5;
+        text-decoration: none;
+        /* IE 8 */
+        color: #808283\9;
+    }
+    
+    #footer a:hover{
+        opacity: 1;
+        /* IE 8 */
+        color: #ecf0f1\9;
+    }
+    
+    #footer .logotype{
+        text-transform: none;
+        line-height: 1;
+        font-size: 23px;
+        opacity: 1;
+        display: inline-block;
+        float: left;
+        /* IE 8 */
+        color: #ecf0f1\9;
+    }
+    
+    #footer .logotype:hover{
+        opacity: 0.5;
+        /* IE 8 */
+        color: #808283\9;
+    }
+    
+    #navigation a{
+        margin-left: 20px;
+        font-family: 'PT Sans', sans-serif;
+        font-weight: 400;
+        font-weight: normal;
+        text-transform: uppercase;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    /* ******************************
+
+    CATEGORY NAVIGATION
+
+    ****************************** */
+    
+    .subnav_container{
+        position: absolute;
+        bottom: 72px;
+        background-color: #151515;
+        width: 100%;
+        left: 0;
+    }
+    
+    #subnav{
+        margin-left: 100px;
+        text-align: left;
+        display: none;
+        clear: both;
+    }
+    
+    #subnav .subnav_parent{
+        text-align: left;
+        width: 150px;
+        padding-right: 20px;
+        margin-top: 25px;
+        display: inline-block;
+        vertical-align: top;
+    }
+    
+    #subnav .subnav_child{
+        margin-bottom: 15px;
+    }
+    
+    #subnav .subnav_parent a{
+        font-family: 'PT Sans Narrow', sans-serif;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 700;
+    }
+    
+    #subnav .subnav_child a{
+        font-family: 'PT Serif', serif;
+        font-size: 13px;
+        line-height: 1.7em;
+        font-weight: 400;
+        font-weight: normal;
+        text-transform: none;
+    }
+
+    #subnav .subnav_child .selected a,
+    #subnav .subnav_parent .selected_parent{
+        opacity: 1;
+        /* IE 8 */
+        color: #ecf0f1\9;
+    }
+
+
+    /* ******************************
+
+    GENERIC PAGES
+
+    ****************************** */
+
+    .page_container {
+        color: #151515;
+        font-family: 'PT Serif', serif;
+        font-size: 13px;
+        line-height: 1.7em;
+    }
+
+    .html_content h1,
+    .html_content h2,
+    .html_content h3,
+    .html_content p,
+    .html_content a,
+    #product .html_content h1,
+    #product .html_content h2,
+    #product .html_content h3,
+    #product .html_content p,
+    #product .html_content a{
+        color: #151515;
+        font-family: 'PT Serif', serif;
+        font-size: 13px;
+        line-height: 1.7em;
+        font-weight: 400;
+        font-weight: normal;
+        margin: 0;
+        text-transform: none;
+    }
+    
+    .html_content a,
+    #product .html_content a{
+        font-weight: 700;
+        cursor: pointer;
+    }
+    
+    .html_content a:hover,
+    #product .html_content a:hover{
+        opacity: 0.5;
+        /* IE 8 */
+        color: #808283\9;
+    }
+
+    /* ******************************
+
+    PAGE LOAD
+
+    ****************************** */
+    
+    .product_list, #footer{
+        visibility: hidden;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="{{assets_url}}/shared/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <header>
+        <a class="logotype" href="{{store_url}}">
+            {{#logotype}}
+                <img src="{{url-300}}" alt="{{store_name}}">
+            {{/logotype}}
+            {{#no_logotype}}
+                {{store_name}}
+            {{/no_logotype}}
+        </a>
+        <div class="html_content" id="store_description">
+            {{store_description}}
+        </div>
+    </header>
+
+
+{{#list_page}}
+{{! This block is rendered when displaying a list of products }}
+    <section id="products">
+        {{! Output a list if we have any products }}
+        {{#products?}}
+            <ul class="product_list">
+                {{#products}}
+                    <li class="product_slide">
+                        <article class="product_container">
+                            <figure class="image_container">
+                                {{#all_images}}
+                                    <img class="product_image" src="{{url-2000}}" alt="{{title}}">
+                                {{/all_images}}
+                            </figure>
+        
+                            <div class="slide_content">
+                                <section class="details_container">
+                                    <div class="text_content">
+                                        <h2><a href="{{url}}">{{title}}</a></h2>
+                                        <span class="price">{{price_with_currency}}</span>
+                                        <div class="description html_content">
+                                            {{description}}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fixed_content">
+                                        {{! The #add_to_cart block is only rendered if the product is in stock }}
+                                        {{#add_to_cart}}
+                                            {{#variations_select}}{{/variations_select}}
+                                            <div class="add_to_cart">
+                                                {{#add_to_cart_button}}
+                                                    {{#lang}}Add to cart{{/lang}}
+                                                {{/add_to_cart_button}}
+                                            </div>
+                                        {{/add_to_cart}}
+                                        {{! This block will be rendered instead of the #add_to_cart block when the product is out of stock }}
+                                        {{#out_of_stock}}
+                                            <div class="out_of_stock">
+                                                {{#lang}}Out of stock{{/lang}}
+                                            </div>
+                                        {{/out_of_stock}}
+                                        <div class="social_buttons">{{social_buttons}}</div>
+                                    </div>
+                                </section>
+                            </div>
+                        </article>
+                    </li>
+                {{/products}}
+            </ul>
+        {{/products?}}
+    </section>
+{{/list_page}}
+
+
+{{#product_page}}
+{{! This block is rendered when displaying a single product }}
+    {{#product}}
+        <ul class="product_list">
+            <li class="product_slide">
+                <article id="product" class="product_container" itemscope itemtype="http://schema.org/Product">
+                    <figure class="image_container">
+                        {{#all_images}}
+                            <img class="product_image" src="{{url-2000}}" alt="{{title}}" itemprop="image">
+                        {{/all_images}}
+                    </figure>
+    
+                    <div class="slide_content">
+                        <section class="details_container" id="product_info">
+                            <div class="text_content">
+                                <h1 itemprop="name">{{title}}</h1>
+                                <span class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">{{price_with_currency}}</span>
+                                {{! This is meta data for search engines etc. }}
+                                <meta itemprop="priceCurrency" content="{{currency_code}}">
+                                {{#in_stock}}
+                                    <link itemprop="availability" href="http://schema.org/InStock">
+                                {{/in_stock}}
+                                {{#out_of_stock}}
+                                    <link itemprop="availability" href="http://schema.org/OutOfStock">
+                                {{/out_of_stock}}
+                                
+                                <div class="description html_content" itemprop="description">
+                                    {{description}}
+                                </div>
+                            </div>
+                            
+                            <div class="fixed_content">
+                                {{! The #add_to_cart block is only rendered if the product is in stock }}
+                                {{#add_to_cart}}
+                                    {{#variations_select}}{{/variations_select}}
+                                    <div class="add_to_cart">
+                                    {{#add_to_cart_button}}
+                                        {{#lang}}Add to cart{{/lang}}
+                                    {{/add_to_cart_button}}
+                                    </div>
+                                {{/add_to_cart}}
+    
+                                {{! This block will be rendered instead of the #add_to_cart block when the product is out of stock }}
+                                {{#out_of_stock}}
+                                    <div class="out_of_stock">
+                                        {{#lang}}Out of stock{{/lang}}
+                                    </div>
+                                {{/out_of_stock}}
+                                <div class="social_buttons">{{social_buttons}}</div>
+                            </div>
+                        </section>
+                    </div>
+                </article>
+            </li>
+        </ul>
+    {{/product}}
+{{/product_page}}
+
+
+    <footer id="footer">
+        {{#navigation?}}
+            <div class="subnav_container">
+                <ul id="subnav">
+                    {{#navigation}}
+                        <li class="subnav_parent">
+                            <a class="{{#is_current}}selected_parent{{/is_current}}" href="{{url}}">
+                                {{label}}
+                            </a>
+                            
+                            {{! Render the submenu if it has any navigation items }}
+                            {{#children?}}
+                                <ul class="subnav_child">
+                                    {{#children}}
+                                        <li class="{{#is_current}}selected{{/is_current}}">
+                                            <a href="{{url}}">
+                                                {{label}}
+                                            </a>
+                                        </li>
+                                    {{/children}}
+                                </ul>
+                            {{/children?}}
+                        </li>
+                    {{/navigation}}
+                </ul>
+            </div>
+        {{/navigation?}}
+            
+        <a class="logotype" href="{{store_url}}">{{store_name}}</a>
+        <ul id="navigation">
+            {{#navigation?}}
+                <li class="column">
+                    <a href="#" id="categories_link">{{#lang}}Categories{{/lang}}</a>
+                </li>
+            {{/navigation?}}
+            {{#store_email}}
+                <li class="column">
+                    <a href="mailto:{{store_email}}">{{#lang}}Contact{{/lang}}</a>
+                </li>
+            {{/store_email}}
+            {{#store_blog_url}}
+                <li class="column">
+                    <a href="{{store_blog_url}}" target="_blank">
+                        {{#lang}}Blog{{/lang}}
+                    </a>
+                </li>
+            {{/store_blog_url}}
+            <li class="column">
+                {{#return_policy}}
+                    {{#lang}}Return policy{{/lang}}
+                {{/return_policy}}
+            </li>
+            <li class="column">
+                {{#terms}}
+                    {{#lang}}Terms & Conditions{{/lang}}
+                {{/terms}}
+            </li>
+        </ul>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+    $(window).load(function() {
+        // Set product slide height to its smallest product image
+        function set_slide_height(){
+            $(".image_container").each(function(){
+                var image_height = $(this).children(".product_image:first").height();
+                $(this).children(".product_image").each(function(){
+                    var next_height = $(this).height();
+                    if (image_height > next_height){
+                        image_height = next_height;
+                    } 
+                });
+                $(this).css("height", image_height);
+            });
+        }
+        
+        // Set details container height depending on slide height (IE8)
+        function set_details_container_height(){
+            $(".details_container").css("max-height", function(){
+                  return ($(this).parent(".slide_content").height()-200);
+            });             
+        }
+        
+        // Set product description height depending on cart / variation content
+        function set_text_container_height(){
+            $(".text_content").css("max-height", "none"); // Reset
+            $(".text_content").css("max-height", function(){
+              return $(this).parent(".details_container").height()-$(this).parent(".details_container").children(".fixed_content").outerHeight(true);
+            });            
+        }
+        
+        // Vertically center product details box
+        function position_details_container(){
+            $(".details_container").css("margin-top", function(){
+              return ($(this).parent(".slide_content").height()-$(this).outerHeight())/2;
+            });            
+        }
+        
+        // Position category menu depending on footer height
+        function position_category_menu(){
+            $(".subnav_container").css("bottom", function(){
+              return $("#footer").outerHeight();
+            });
+        }
+        
+        // Change layout depending on browser window width
+        function layout_after_window_size(){
+            if ($(window).width() < 700){
+                $(".slide_content").removeClass("slide_small").addClass("slide_small");
+                $(".details_container").removeClass("details_large");
+                if (($.browser.msie) && ($.browser.version < 9)){
+                    $(".details_container").css("max-height", "none");
+                }
+                $(".text_content").css("max-height", "none");
+            }
+            else{
+                $(".slide_content").removeClass("slide_small");
+                $(".details_container").removeClass("details_large").addClass("details_large");
+                if (($.browser.msie) && ($.browser.version < 9)){
+                    set_details_container_height();
+                }
+                set_text_container_height();
+            }
+        }
+        
+        set_slide_height();
+        layout_after_window_size();
+        position_details_container();
+        position_category_menu();
+        if ($.browser.msie){
+            set_slide_height();
+            layout_after_window_size();
+            position_details_container();
+            position_category_menu();
+        }
+        // Display content when page is loaded
+        $(".product_list").css("visibility", "visible");
+        $("#footer").css("visibility", "visible");
+        
+        // Create values for product image slideshow  
+        var slideshow_timer = 5000; // Amount of time each image is shown, in ms
+        var interval_id = new Array($(".product_slide").length);
+        // Fade in next product image
+        function slideshow_fade(image_container){
+            var first_image = $(image_container).children(".product_image:first-child");
+            first_image.hide();
+            first_image.remove();
+            $(image_container).append(first_image);
+            first_image.fadeIn();
+        };
+
+        // Start slideshow if product has several product images
+        $(".image_container").each(function(){
+            if ($(this).children(".product_image").length > 1){
+                $(this).css("cursor", "pointer"); 
+                var slide_index = $(this).parent(".product_container").parent(".product_slide").index();
+                var image_container = $(this);
+                // Timer for slideshow
+                interval_id[slide_index] = setInterval( function() {
+                    slideshow_fade(image_container);
+                }, slideshow_timer);
+            }
+        });
+        
+        // Stop slideshow and show next image when product picture is clicked
+        $(".image_container").click(function(){
+            if ($(this).children(".product_image").length > 1){
+                var slide_index = $(this).parent(".product_container").parent(".product_slide").index();
+                var image_container = $(this);
+                clearInterval(interval_id[slide_index]);
+                slideshow_fade(image_container);
+            }
+        });
+        
+        // Open category menu when "Categories" link is clicked
+        $("#categories_link").click(function(e){
+            e.preventDefault();
+            $("#subnav").slideToggle();
+        });
+        
+        // Re-calculate css values if window size changes
+        $(window).resize(function(){
+            set_slide_height();
+            layout_after_window_size();
+            position_details_container();
+            position_category_menu();
+        });
+    });
+    </script>
+
+</body>
+</html>
+
+<!--
+Designed and developed by Hannah Ahl, dribbble.com/ahl
+
+Want to create your own Tictail theme?
+Check out the documentation at https://tictail.com/docs
+-->
