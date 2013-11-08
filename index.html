@@ -632,17 +632,23 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script>
     $(window).load(function() {
-        // Set product slide height to its smallest product image
+        // Set product slide height to its smallest product image, or full height if no product image is available
         function set_slide_height(){
             $(".image_container").each(function(){
-                var image_height = $(this).children(".product_image:first").height();
-                $(this).children(".product_image").each(function(){
-                    var next_height = $(this).height();
-                    if (image_height > next_height){
-                        image_height = next_height;
-                    } 
-                });
-                $(this).css("height", image_height);
+                if ($(this).children(".product_image").length == 0){
+                    $(this).parent(".product_container").children(".slide_content").children(".details_container").css("max-height", "none");
+                    $(this).css("height", $(this).parent(".product_container").children(".slide_content").children(".details_container").height()+200);
+                }
+                else{
+                    var image_height = $(this).children(".product_image:first").height();
+                    $(this).children(".product_image").each(function(){
+                        var next_height = $(this).height();
+                        if (image_height > next_height){
+                            image_height = next_height;
+                        } 
+                    });
+                    $(this).css("height", image_height);               
+                }
             });
         }
         
